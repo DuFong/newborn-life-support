@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 플래그 0으로 변경, 버튼 색 변경
                 flag = 0;
-                btnGte100.setBackgroundColor(0xFF8C00);
+                btnGte100.setBackgroundResource(R.drawable.btn_redcolor);
                 btnLt100.setBackgroundColor(Color.WHITE);
                 btnLt60.setBackgroundColor(Color.WHITE);
 
