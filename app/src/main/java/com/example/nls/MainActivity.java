@@ -2,6 +2,7 @@ package com.example.nls;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 플래그 0으로 변경, 버튼 색 변경
                 flag = 0;
+                btnGte100.setBackgroundColor(0xFF8C00);
+                btnLt100.setBackgroundColor(Color.WHITE);
+                btnLt60.setBackgroundColor(Color.WHITE);
 
                 // 1분 이상: 응급처치 종료
             }
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 플래그 1로 변경(기본값), 버튼 색 변경
                 flag = 1;
+                btnGte100.setBackgroundColor(Color.WHITE);
+                btnLt100.setBackgroundColor(0xFF8C00);
+                btnLt60.setBackgroundColor(Color.WHITE);
             }
         });
 
@@ -59,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 플래그 2로 변경, 버튼 색 변경
                 flag = 2;
+                btnGte100.setBackgroundColor(Color.WHITE);
+                btnLt100.setBackgroundColor(Color.WHITE);
+                btnLt60.setBackgroundColor(0xFF8C00);
             }
         });
     }
