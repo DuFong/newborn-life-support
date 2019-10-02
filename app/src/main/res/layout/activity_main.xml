@@ -58,25 +58,28 @@
             android:id="@+id/gte_100"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:text="심박수 &gt; 100 회/분"/>
+            android:background="#FDFDFD"
+            android:gravity="center"
+            android:text="심박수 &gt; 100 회/분" />
 
         <Button
             android:id="@+id/lt_100"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:text="심박수 &lt; 100 회/분"/>
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="심박수 &lt; 100 회/분" />
 
         <Button
             android:id="@+id/lt_60"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:text="심박수 &lt; 60 회/분"/>
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="심박수 &lt; 60 회/분" />
     </LinearLayout>
 
     <LinearLayout
