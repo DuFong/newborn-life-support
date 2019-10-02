@@ -6,13 +6,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
     Button btnGte100, btnLt100, btnLt60;
-    TextView txtTitle, txtStatus, txtTimer;                 // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
+    Chronometer chmTimer;
+    TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
     TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
 
     short flag = 1;
@@ -27,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
         btnLt100 = findViewById(R.id.lt_100);
         btnLt60 = findViewById(R.id.lt_60);
 
+        chmTimer = findViewById(R.id.timer);
+
+        txtTitle = findViewById(R.id.title);
         txtStatus = findViewById(R.id.status);
-        txtTimer = findViewById(R.id.timer);
 
         txtChogi = findViewById(R.id.chogi);
         txtYangap = findViewById(R.id.yangap);
@@ -71,5 +75,10 @@ public class MainActivity extends AppCompatActivity {
                 btnLt60.setBackgroundColor(0xFF8C00);
             }
         });
+
+        chmTimer.start();
+        chmTimer.getContentDescription();
+
+        txtTitle.setText(chmTimer.getContentDescription());
     }
 }
