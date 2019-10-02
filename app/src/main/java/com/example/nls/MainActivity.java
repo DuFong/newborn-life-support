@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
     TextView txtTitle, txtStatus, txtTimer;
     TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
 
+    short flag = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,21 +37,26 @@ public class MainActivity extends AppCompatActivity {
         btnGte100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 응급처치 종료
+                // 플래그 0으로 변경, 버튼 색 변경
+                flag = 0;
+
+                // 1분 이상: 응급처치 종료
             }
         });
 
         btnLt100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 기본처치 -> 양압환기 -> MRSOPA -> 기관삽관 (유지)
+                // 플래그 1로 변경(기본값)
+                flag = 1;
             }
         });
 
         btnLt60.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 기관삽관 -> 심장마사지, 에피네프린 투여
+                // 플래그 2로 변경
+                flag = 2;
             }
         });
     }
