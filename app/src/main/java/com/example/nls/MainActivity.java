@@ -18,11 +18,13 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
     Button btnGte100, btnLt100, btnLt60;
-    Chronometer chmTimer;
     TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
     TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
 
     static Timer timer;
+    static Chronometer chmTimer;
+
+    Handler handler;
 
     short flag = 1;
     boolean isTimerStarted = false;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         txtHeart = findViewById(R.id.heart);
         txtEpinephrine = findViewById(R.id.epinephrine);
 
-        final Handler handler = new Handler();
+        handler = new Handler();
 
         // 타이머 시작
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         }
+                        else if(flag == 0) {
+                            setInitialActivity();
+                        }
                     }
                 };
                 // 1분 30초 경과
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task2M30S = new TimerTask() {
                     @Override
                     public void run() {
-                        afterGigwan(chmTimer);
+                        afterGigwan();
                     }
                 };
 
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 timer.schedule(task1M30S, 90000 - 7);
                 timer.schedule(task2M, 120000 - 7);
                 timer.schedule(task2M30S, 150000 - 7);
+//                timer.schedule(task2M30S, 3000);
 
                 chmTimer.start();
             }
@@ -131,6 +137,10 @@ public class MainActivity extends AppCompatActivity {
                     btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
 
                     // 1분 이상: 응급처치 종료
+                    long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
+                    if(currentTime > 60000) {
+                        setInitialActivity();
+                    }
                 }
             }
         });
@@ -160,11 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-        //timer.schedule(second, 5000);
     }
 
     @Override
@@ -173,25 +178,63 @@ public class MainActivity extends AppCompatActivity {
         chmTimer.stop();
     }
 
-    private void afterGigwan(final Chronometer chmTimer) {
+    private void afterGigwan() {
         if(flag == 2){
             // 60이상 100 미만
             // 기관삽관 유지
+            txtHeart.setBackgroundResource(R.drawable.b_heart);
+            txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
+            txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
         }
         else if(flag == 3) {
             // 60 미만
             // 심장마사지, 에피네프린 투여
-            
+            txtHeart.setBackgroundResource(R.drawable.r_heart);
+            txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+            txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
         }
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
         txtTitle.setText(Long.toString(currentTime));
+        // 10분 경과
+        if(currentTime > /*12000*/600000) {
+            setInitialActivity();
+            return;
+        }
         TimerTask test = new TimerTask() {
             @Override
             public void run() {
-                afterGigwan(chmTimer);
+                afterGigwan();
             }
         };
         timer.schedule(test, 30000 - 7);
+        //timer.schedule(test, 3000);
+    }
+
+    private void setInitialActivity() {
+        chmTimer.stop();
+        chmTimer.setBase(SystemClock.elapsedRealtime());
+
+        flag = 1;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                btnStart.setVisibility(View.VISIBLE);
+
+                btnGte100.setBackgroundResource(R.drawable.btn_hr_gt100);
+                btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
+                btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
+
+                txtStatus.setText("초기처치");
+
+                txtChogi.setBackgroundResource(R.drawable.b_chogi);
+                txtYangap.setBackgroundResource(R.drawable.b_yangap);
+                txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
+                txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
+                txtHeart.setBackgroundResource(R.drawable.b_heart);
+                txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
+            }
+        });
     }
 }
