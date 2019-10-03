@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setInitialActivity() {
         Toast.makeText(MainActivity.this, "신생아 소생술 종료", Toast.LENGTH_SHORT).show();
-        
+
         chmTimer.stop();
         chmTimer.setBase(SystemClock.elapsedRealtime());
         timer.cancel();
