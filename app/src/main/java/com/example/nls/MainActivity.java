@@ -4,18 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
     Button btnGte100, btnLt100, btnLt60;
-    TextView txtTitle, txtStatus, txtTimer;                 // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
+    Chronometer chmTimer;
+    TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
     TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
 
+    static Timer timer;
+
     short flag = 1;
+    boolean isTimerStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         btnLt100 = findViewById(R.id.lt_100);
         btnLt60 = findViewById(R.id.lt_60);
 
+        txtTitle = findViewById(R.id.title);
         txtStatus = findViewById(R.id.status);
-        txtTimer = findViewById(R.id.timer);
 
         txtChogi = findViewById(R.id.chogi);
         txtYangap = findViewById(R.id.yangap);
@@ -37,39 +47,137 @@ public class MainActivity extends AppCompatActivity {
         txtHeart = findViewById(R.id.heart);
         txtEpinephrine = findViewById(R.id.epinephrine);
 
+        final Handler handler = new Handler();
+
+        // 타이머 시작
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                chmTimer = findViewById(R.id.timer);
+                chmTimer.setBase(SystemClock.elapsedRealtime());
+                timer = new Timer();
+                isTimerStarted = true;
+
+                // 1분 경과
+                TimerTask task1M = new TimerTask() {
+                    @Override
+                    public void run() {
+                        // 100 미만인 경우(flag 값 = 1) 양압환기
+                        if(flag == 1) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtStatus.setText("호흡음 청진");
+                                    txtYangap.setBackgroundColor(Color.RED);
+                                    txtChogi.setBackgroundColor(Color.WHITE);
+                                }
+                            });
+                        }
+                    }
+                };
+                // 1분 30초 경과
+                TimerTask task1M30S = new TimerTask() {
+                    @Override
+                    public void run() {
+                        // 100 미만인 경우(flag = 1) MRSOPA
+                        if(flag == 1) {
+                            txtMrsopa.setBackgroundColor(Color.RED);
+                            txtYangap.setBackgroundColor(Color.WHITE);
+                        }
+                    }
+                };
+                // 2분 경과
+                TimerTask task2M = new TimerTask() {
+                    @Override
+                    public void run() {
+                        // 100 미만인 경우 기관삽관
+                        if(flag == 1) {
+                            txtGigwan.setBackgroundColor(Color.RED);
+                            txtYangap.setBackgroundColor(Color.WHITE);
+                        }
+                    }
+                };
+                // 2분 30초 경과
+                TimerTask task2M30S = new TimerTask() {
+                    @Override
+                    public void run() {
+                        afterGigwan(chmTimer);
+                    }
+                };
+
+                timer.schedule(task1M, 60000 - 7);
+                timer.schedule(task1M30S, 90000 - 7);
+                timer.schedule(task2M, 120000 - 7);
+                timer.schedule(task2M30S, 150000 - 7);
+
+                chmTimer.start();
+            }
+        });
+
         btnGte100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 플래그 0으로 변경, 버튼 색 변경
-                flag = 0;
-                btnGte100.setBackgroundResource(R.drawable.btn_redcolor);
-                btnLt100.setBackgroundColor(Color.WHITE);
-                btnLt60.setBackgroundColor(Color.WHITE);
+                if(isTimerStarted) {
+                    // 플래그 0으로 변경, 버튼 색 변경
+                    flag = 0;
+                    btnGte100.setBackgroundResource(R.drawable.btn_redcolor);
+                    btnLt100.setBackgroundColor(Color.WHITE);
+                    btnLt60.setBackgroundColor(Color.WHITE);
 
-                // 1분 이상: 응급처치 종료
+                    // 1분 이상: 응급처치 종료
+                }
             }
         });
 
         btnLt100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 플래그 1로 변경(기본값), 버튼 색 변경
-                flag = 1;
-                btnGte100.setBackgroundColor(Color.WHITE);
-                btnLt100.setBackgroundColor(0xFF8C00);
-                btnLt60.setBackgroundColor(Color.WHITE);
+                if(isTimerStarted) {
+                    // 플래그 1로 변경(기본값), 버튼 색 변경
+                    flag = 1;
+                    btnGte100.setBackgroundColor(Color.WHITE);
+                    btnLt100.setBackgroundColor(0xFF8C00);
+                    btnLt60.setBackgroundColor(Color.WHITE);
+                }
             }
         });
 
         btnLt60.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 플래그 2로 변경, 버튼 색 변경
-                flag = 2;
-                btnGte100.setBackgroundColor(Color.WHITE);
-                btnLt100.setBackgroundColor(Color.WHITE);
-                btnLt60.setBackgroundColor(0xFF8C00);
+                if(isTimerStarted) {
+                    // 플래그 2로 변경, 버튼 색 변경
+                    flag = 2;
+                    btnGte100.setBackgroundColor(Color.WHITE);
+                    btnLt100.setBackgroundColor(Color.WHITE);
+                    btnLt60.setBackgroundColor(0xFF8C00);
+                }
             }
         });
+
+
+
+
+        //timer.schedule(second, 5000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chmTimer.stop();
+    }
+
+    private void afterGigwan(final Chronometer chmTimer) {
+        // 현재 지난 시간
+        long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
+        txtTitle.setText(Long.toString(currentTime));
+        TimerTask test = new TimerTask() {
+            @Override
+            public void run() {
+                afterGigwan(chmTimer);
+            }
+        };
+        timer.schedule(test, 30000 - 7);
     }
 }
