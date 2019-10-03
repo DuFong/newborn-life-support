@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // start 버튼 숨기기
+                btnStart.setVisibility(View.GONE);
+
+                txtChogi.setBackgroundResource(R.drawable.r_chogi);
+
                 chmTimer = findViewById(R.id.timer);
                 chmTimer.setBase(SystemClock.elapsedRealtime());
                 timer = new Timer();
@@ -69,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     txtStatus.setText("호흡음 청진");
-                                    txtYangap.setBackgroundColor(Color.RED);
-                                    txtChogi.setBackgroundColor(Color.WHITE);
+                                    txtYangap.setBackgroundResource(R.drawable.r_yangap);
+                                    txtChogi.setBackgroundResource(R.drawable.b_chogi);
                                 }
                             });
                         }
@@ -82,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // 100 미만인 경우(flag = 1) MRSOPA
                         if(flag == 1) {
-                            txtMrsopa.setBackgroundColor(Color.RED);
-                            txtYangap.setBackgroundColor(Color.WHITE);
+                            txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
+                            txtYangap.setBackgroundResource(R.drawable.b_yangap);
                         }
                     }
                 };
@@ -93,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // 100 미만인 경우 기관삽관
                         if(flag == 1) {
-                            txtGigwan.setBackgroundColor(Color.RED);
-                            txtYangap.setBackgroundColor(Color.WHITE);
+                            txtGigwan.setBackgroundResource(R.drawable.r_gigwan);;
+                            txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
                         }
                     }
                 };
@@ -121,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
                 if(isTimerStarted) {
                     // 플래그 0으로 변경, 버튼 색 변경
                     flag = 0;
-                    btnGte100.setBackgroundResource(R.drawable.btn_redcolor);
-                    btnLt100.setBackgroundColor(Color.WHITE);
-                    btnLt60.setBackgroundColor(Color.WHITE);
+                    btnGte100.setBackgroundResource(R.drawable.btn_clicked_gt100);
+                    btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
+                    btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
 
                     // 1분 이상: 응급처치 종료
                 }
@@ -136,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 if(isTimerStarted) {
                     // 플래그 1로 변경(기본값), 버튼 색 변경
                     flag = 1;
-                    btnGte100.setBackgroundColor(Color.WHITE);
-                    btnLt100.setBackgroundColor(0xFF8C00);
-                    btnLt60.setBackgroundColor(Color.WHITE);
+                    btnGte100.setBackgroundResource(R.drawable.btn_hr_gt100);
+                    btnLt100.setBackgroundResource(R.drawable.btn_clicked_lt100);
+                    btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
                 }
             }
         });
@@ -149,9 +154,9 @@ public class MainActivity extends AppCompatActivity {
                 if(isTimerStarted) {
                     // 플래그 2로 변경, 버튼 색 변경
                     flag = 2;
-                    btnGte100.setBackgroundColor(Color.WHITE);
-                    btnLt100.setBackgroundColor(Color.WHITE);
-                    btnLt60.setBackgroundColor(0xFF8C00);
+                    btnGte100.setBackgroundResource(R.drawable.btn_hr_gt100);
+                    btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
+                    btnLt60.setBackgroundResource(R.drawable.btn_clicked_lt60);
                 }
             }
         });
