@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
         timer = null;
 
         flag = 1;
+        isTimerStarted = false;
 
         handler.post(new Runnable() {
             @Override
