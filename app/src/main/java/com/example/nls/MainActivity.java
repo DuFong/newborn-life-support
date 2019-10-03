@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         // 100 미만인 경우 기관삽관
                         if(flag == 1) {
                             txtGigwan.setBackgroundColor(Color.RED);
-                            txtYangap.setBackgroundColor(Color.WHITE);
+                            txtMrsopa.setBackgroundColor(Color.WHITE);
                         }
                     }
                 };
@@ -169,6 +169,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void afterGigwan(final Chronometer chmTimer) {
+        if(flag == 2){
+            // 60이상 100 미만
+            // 기관삽관 유지
+        }
+        else if(flag == 3) {
+            // 60 미만
+            // 심장마사지, 에피네프린 투여
+            
+        }
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
         txtTitle.setText(Long.toString(currentTime));
