@@ -55,40 +55,38 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
-        android:layout_weight="0.2">
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/gte_100"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="심박수 &gt; 100 회/분" />
+            android:background="@drawable/btn_hr_gt100"
+            android:gravity="center" />
 
         <Button
             android:id="@+id/lt_100"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="심박수 &lt; 100 회/분" />
+            android:background="@drawable/btn_hr_lt100"
+            android:gravity="center" />
 
         <Button
             android:id="@+id/lt_60"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="심박수 &lt; 60 회/분" />
+            android:background="@drawable/btn_hr_lt60"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,9 +103,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="초기처치" />
+            android:background="@drawable/b_chogi"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/yangap"
@@ -116,9 +113,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="양압환기" />
+            android:background="@drawable/b_yangap"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/mrsopa"
@@ -127,9 +123,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="MRSOPA" />
+            android:background="@drawable/b_mrsopa"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -147,9 +142,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="기관삽관" />
+            android:background="@drawable/b_gigwan"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/heart"
@@ -158,9 +152,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="심장마사지" />
+            android:background="@drawable/b_heart"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/epinephrine"
@@ -169,9 +162,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bold"
-            android:gravity="center"
-            android:text="에피네프린\n투여" />
+            android:background="@drawable/b_epineprine"
+            android:gravity="center" />
     </LinearLayout>
 
 
