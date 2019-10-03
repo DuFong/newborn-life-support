@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 timer.schedule(task1M30S, 90000 - 7);
                 timer.schedule(task2M, 120000 - 7);
                 timer.schedule(task2M30S, 150000 - 7);
-//                timer.schedule(task2M30S, 3000);
 
                 chmTimer.start();
             }
@@ -179,14 +178,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void afterGigwan() {
-        if(flag == 2){
+        if(flag == 1){
             // 60이상 100 미만
             // 기관삽관 유지
             txtHeart.setBackgroundResource(R.drawable.b_heart);
             txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
             txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
         }
-        else if(flag == 3) {
+        else if(flag == 2) {
             // 60 미만
             // 심장마사지, 에피네프린 투여
             txtHeart.setBackgroundResource(R.drawable.r_heart);
@@ -195,9 +194,8 @@ public class MainActivity extends AppCompatActivity {
         }
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
-        txtTitle.setText(Long.toString(currentTime));
         // 10분 경과
-        if(currentTime > /*12000*/600000) {
+        if(currentTime > 600000) {
             setInitialActivity();
             return;
         }
@@ -208,12 +206,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(test, 30000 - 7);
-        //timer.schedule(test, 3000);
     }
 
     private void setInitialActivity() {
         chmTimer.stop();
         chmTimer.setBase(SystemClock.elapsedRealtime());
+        timer.cancel();
+        timer = null;
 
         flag = 1;
 
