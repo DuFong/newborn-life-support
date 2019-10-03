@@ -11,27 +11,17 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="7dp"
         android:layout_weight="0.75"
+        android:background="@drawable/title_ui"
         android:gravity="center"
-        android:textSize="20dp"
-        android:fontFamily=""
-        android:background="@drawable/title_ui" />
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="5dp"
-        android:layout_weight="0.1"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="초기 처치"/>
+        android:textSize="20dp" />
 
     <FrameLayout
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:layout_weight="0.9"
+        android:layout_marginTop="30dp"
         android:background="@drawable/timer_edge"
         android:layout_gravity="center">
 
@@ -44,6 +34,17 @@
             android:gravity="center"
             android:textSize="40dp"
             android:textColor="#A6C6D3"/>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="초기 처치"
+            android:textSize="30dp"/>
 
         <Button
             android:id="@+id/start"
@@ -58,15 +59,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/gte_100"
-            android:layout_width="130dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/btn_hr_gt100"
@@ -74,17 +75,15 @@
 
         <Button
             android:id="@+id/lt_100"
-            android:layout_width="130dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn_hr_lt100"
             android:gravity="center" />
 
         <Button
             android:id="@+id/lt_60"
-            android:layout_width="130dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/btn_hr_lt60"
@@ -93,8 +92,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.3"
+        android:layout_height="60dp"
+        android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -125,8 +124,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.3"
+        android:layout_height="60dp"
+        android:layout_weight="0.1"
         android:gravity="center"
         android:layout_marginBottom="20dp"
         android:orientation="horizontal">
