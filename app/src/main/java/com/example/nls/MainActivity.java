@@ -229,8 +229,13 @@ public class MainActivity extends AppCompatActivity {
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
         // 10분 경과
-        if(currentTime > 180000) {
-            setInitialActivity();
+        if(currentTime > 600000) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    finishCpr(false);
+                }
+            });
             return;
         }
         TimerTask test = new TimerTask() {
