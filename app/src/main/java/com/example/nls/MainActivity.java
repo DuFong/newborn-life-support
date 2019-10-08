@@ -1,8 +1,9 @@
 package com.example.nls;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -84,7 +85,12 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                         else {
-                            setInitialActivity();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finishCpr(true);
+                                }
+                            });
                         }
                     }
                 };
@@ -113,25 +119,20 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     afterGigwan();
-//                                    txtGigwan.setBackgroundResource(R.drawable.r_gigwan);;
-//                                    txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
                                 }
                             });
                         }
+                        // 100 이상인 경우 호흡 및 전신상태 확인
+                        else {
+                            // 대화상자 띄우기
+                            checkBreathAndBody();
+                        }
                     }
                 };
-                // 2분 30초 경과
-//                TimerTask task2M30S = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        afterGigwan();
-//                    }
-//                };
 
                 timer.schedule(task1M, 60000 - 7);
                 timer.schedule(task1M30S, 90000 - 7);
                 timer.schedule(task2M, 120000 - 7);
-        //        timer.schedule(task2M30S, 150000 - 7);
 
                 chmTimer.start();
             }
@@ -147,10 +148,19 @@ public class MainActivity extends AppCompatActivity {
                     btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
                     btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
 
-                    // 1분 이상: 응급처치 종료
+
                     long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
-                    if(currentTime > 60000) {
-                        setInitialActivity();
+                    // 1분 이상: 종료 및 신생아실 이송
+                    if(60000 <= currentTime && currentTime < 61000) {
+                        finishCpr(true);
+                    }
+                    // 1분 1초 ~ 2분 1초 사이: 호흡 및 전신상태 확인
+                    else if(61000 <= currentTime && currentTime < 121000) {
+                        checkBreathAndBody();
+                    }
+                    // 2분 1초 이상: 종료 후 신생아 중환자실 이동
+                    else if(121000 <= currentTime) {
+                        finishCpr(false);
                     }
                 }
             }
@@ -241,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
     }
 
+    // 초기 시작 화면 복구
     private void setInitialActivity() {
         handler.post(new Runnable() {
             @Override
@@ -267,5 +278,55 @@ public class MainActivity extends AppCompatActivity {
                 turnOffAllAttributes();
             }
         });
+    }
+
+    // 호흡 및 전신상태 체크 대화상자
+    private void checkBreathAndBody() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+
+        dialog.setTitle("상태 확인");
+        dialog.setMessage("호흡이 안정적이고 전신상태가 양호합니까?");
+
+        // 예: 종료 및 신생아실 이송
+        dialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finishCpr(true);
+            }
+        });
+
+        // 아니오: 종료 후 신생아 중환자실 이동
+        dialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finishCpr(false);
+            }
+        });
+
+        dialog.show();
+    }
+
+    // 소생술 종료 알림 대화상자
+    private void finishCpr(boolean isGoToNewborn) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+
+        dialog.setTitle("심폐소생술 종료");
+
+        if(isGoToNewborn)
+            dialog.setMessage("신생아실으로 이송합니다.");
+        else
+            dialog.setMessage("중환자실로 이송합니다.");
+
+        dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                setInitialActivity();
+            }
+        });
+
+        dialog.show();
     }
 }
