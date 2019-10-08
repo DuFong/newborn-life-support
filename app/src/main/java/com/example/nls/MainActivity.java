@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
 
     short flag = 1;
-    boolean restartGigwan = false;
+    boolean isRestartGigwan = false;
     boolean isTimerStarted = false;
 
     @Override
@@ -94,8 +94,12 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // 100 미만인 경우(flag = 1) 양압환기, MRSOPA
                         if(flag != 0) {
-                            txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
-                            //txtYangap.setBackgroundResource(R.drawable.b_yangap);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
+                                }
+                            });
                         }
                     }
                 };
@@ -105,23 +109,29 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // 100 미만인 경우 기관삽관
                         if(flag != 0) {
-                            txtGigwan.setBackgroundResource(R.drawable.r_gigwan);;
-                            txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    afterGigwan();
+//                                    txtGigwan.setBackgroundResource(R.drawable.r_gigwan);;
+//                                    txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
+                                }
+                            });
                         }
                     }
                 };
                 // 2분 30초 경과
-                TimerTask task2M30S = new TimerTask() {
-                    @Override
-                    public void run() {
-                        afterGigwan();
-                    }
-                };
+//                TimerTask task2M30S = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        afterGigwan();
+//                    }
+//                };
 
                 timer.schedule(task1M, 60000 - 7);
                 timer.schedule(task1M30S, 90000 - 7);
                 timer.schedule(task2M, 120000 - 7);
-                timer.schedule(task2M30S, 150000 - 7);
+        //        timer.schedule(task2M30S, 150000 - 7);
 
                 chmTimer.start();
             }
@@ -182,19 +192,29 @@ public class MainActivity extends AppCompatActivity {
     private void afterGigwan() {
         if(flag == 1){
             // 60이상 100 미만
-            restartGigwan = false;
-            turnOffAllAttributes();
-            txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
+            isRestartGigwan = false;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    turnOffAllAttributes();
+                    txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
+                }
+            });
         }
         else if(flag == 2) {
             // 60 미만
-            turnOffAllAttributes();
-            if(restartGigwan) {
-                txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
-            }
-            restartGigwan = true;
-            txtYangap.setBackgroundResource(R.drawable.r_yangap);
-            txtHeart.setBackgroundResource(R.drawable.r_heart);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    turnOffAllAttributes();
+                    if(isRestartGigwan) {
+                        txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+                    }
+                    isRestartGigwan = true;
+                    txtYangap.setBackgroundResource(R.drawable.r_yangap);
+                    txtHeart.setBackgroundResource(R.drawable.r_heart);
+                }
+            });
         }
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
@@ -230,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         timer = null;
 
         flag = 1;
+        isRestartGigwan = false;
         isTimerStarted = false;
 
         handler.post(new Runnable() {
