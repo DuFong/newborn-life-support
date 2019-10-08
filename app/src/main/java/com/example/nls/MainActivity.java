@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
         // 10분 경과
-        if(currentTime > 600000) {
+        if(currentTime > 180000) {
             setInitialActivity();
             return;
         }
@@ -242,20 +242,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setInitialActivity() {
-        Toast.makeText(MainActivity.this, "신생아 소생술 종료", Toast.LENGTH_SHORT).show();
-
-        chmTimer.stop();
-        chmTimer.setBase(SystemClock.elapsedRealtime());
-        timer.cancel();
-        timer = null;
-
-        flag = 1;
-        isRestartGigwan = false;
-        isTimerStarted = false;
-
         handler.post(new Runnable() {
             @Override
             public void run() {
+                Toast.makeText(MainActivity.this, "신생아 소생술 종료", Toast.LENGTH_SHORT).show();
+
+                chmTimer.stop();
+                chmTimer.setBase(SystemClock.elapsedRealtime());
+                timer.cancel();
+                timer = null;
+
+                flag = 1;
+                isRestartGigwan = false;
+                isTimerStarted = false;
+
                 btnStart.setVisibility(View.VISIBLE);
 
                 btnGte100.setBackgroundResource(R.drawable.btn_hr_gt100);
