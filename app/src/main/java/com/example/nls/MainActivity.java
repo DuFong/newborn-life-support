@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
 
     short flag = 1;
+    boolean restartGigwan = false;
     boolean isTimerStarted = false;
 
     @Override
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // 100 미만인 경우(flag 값 = 1) 양압환기
-                        if(flag == 1) {
+                        if(flag != 0) {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         }
-                        else if(flag == 0) {
+                        else {
                             setInitialActivity();
                         }
                     }
@@ -91,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task1M30S = new TimerTask() {
                     @Override
                     public void run() {
-                        // 100 미만인 경우(flag = 1) MRSOPA
-                        if(flag == 1) {
+                        // 100 미만인 경우(flag = 1) 양압환기, MRSOPA
+                        if(flag != 0) {
                             txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
-                            txtYangap.setBackgroundResource(R.drawable.b_yangap);
+                            //txtYangap.setBackgroundResource(R.drawable.b_yangap);
                         }
                     }
                 };
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // 100 미만인 경우 기관삽관
-                        if(flag == 1) {
+                        if(flag != 0) {
                             txtGigwan.setBackgroundResource(R.drawable.r_gigwan);;
                             txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
                         }
@@ -181,17 +182,19 @@ public class MainActivity extends AppCompatActivity {
     private void afterGigwan() {
         if(flag == 1){
             // 60이상 100 미만
-            // 기관삽관 유지
-            txtHeart.setBackgroundResource(R.drawable.b_heart);
-            txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
+            restartGigwan = false;
+            turnOffAllAttributes();
             txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
         }
         else if(flag == 2) {
             // 60 미만
-            // 심장마사지, 에피네프린 투여
+            turnOffAllAttributes();
+            if(restartGigwan) {
+                txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+            }
+            restartGigwan = true;
+            txtYangap.setBackgroundResource(R.drawable.r_yangap);
             txtHeart.setBackgroundResource(R.drawable.r_heart);
-            txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
-            txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
         }
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
@@ -207,6 +210,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.schedule(test, 30000 - 7);
+    }
+
+    private void turnOffAllAttributes() {
+        txtChogi.setBackgroundResource(R.drawable.b_chogi);
+        txtYangap.setBackgroundResource(R.drawable.b_yangap);
+        txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
+        txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
+        txtHeart.setBackgroundResource(R.drawable.b_heart);
+        txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
     }
 
     private void setInitialActivity() {
@@ -231,12 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                 txtStatus.setText("초기처치");
 
-                txtChogi.setBackgroundResource(R.drawable.b_chogi);
-                txtYangap.setBackgroundResource(R.drawable.b_yangap);
-                txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
-                txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
-                txtHeart.setBackgroundResource(R.drawable.b_heart);
-                txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
+                turnOffAllAttributes();
             }
         });
     }
