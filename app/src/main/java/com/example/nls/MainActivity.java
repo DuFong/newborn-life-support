@@ -282,7 +282,8 @@ public class MainActivity extends AppCompatActivity {
 
                 chmTimer.stop();
                 chmTimer.setBase(SystemClock.elapsedRealtime());
-                timer.cancel();
+                if(timer != null)
+                    timer.cancel();
                 timer = null;
 
                 flag = 1;
