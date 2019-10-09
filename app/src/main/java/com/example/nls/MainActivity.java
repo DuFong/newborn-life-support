@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     short flag = 1;
     boolean isRestartGigwan = false;
     boolean isTimerStarted = false;
+    boolean is2MStart = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,19 +221,34 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(flag == 2) {
             // 60 미만
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    turnOffAllAttributes();
-                    if(isRestartGigwan) {
-                        txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+            // 60 미만이지만 처음 2분에 실행 되는 경우 기관삽관부터 해야 함
+            if(!is2MStart) {
+                isRestartGigwan = false;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        turnOffAllAttributes();
+                        txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
                     }
-                    isRestartGigwan = true;
-                    txtYangap.setBackgroundResource(R.drawable.r_yangap);
-                    txtHeart.setBackgroundResource(R.drawable.r_heart);
-                }
-            });
+                });
+            }
+            // 일반적인 60 미만 처리
+            else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        turnOffAllAttributes();
+                        if (isRestartGigwan) {
+                            txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+                        }
+                        isRestartGigwan = true;
+                        txtYangap.setBackgroundResource(R.drawable.r_yangap);
+                        txtHeart.setBackgroundResource(R.drawable.r_heart);
+                    }
+                });
+            }
         }
+        is2MStart = true;
         // 현재 지난 시간
         long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
         // 10분 경과
