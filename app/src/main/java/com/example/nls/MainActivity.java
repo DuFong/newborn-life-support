@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
     static Timer timer;
     static Chronometer chmTimer;
 
+    // 뒤로가기 막기에서 사용하는 변수
+    private final long FINISH_INTERVAL_TIME = 2000;
+    private long   backPressedTime = 0;
+
+
     Handler handler;
 
     short flag = 1;
@@ -185,8 +190,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if(chmTimer != null) {
+            chmTimer.stop();
+        }
         super.onDestroy();
-        chmTimer.stop();
     }
 
     private void afterGigwan() {
@@ -242,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setInitialActivity() {
-        Toast.makeText(MainActivity.this, "신생아 소생술 종료", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "신생아 소생술 종료", Toast.LENGTH_SHORT).show();
 
         chmTimer.stop();
         chmTimer.setBase(SystemClock.elapsedRealtime());
@@ -268,4 +275,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        long tempTime        = System.currentTimeMillis();
+        long intervalTime    = tempTime - backPressedTime;
+
+        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
+        {
+            super.onBackPressed();
+        }
+        else
+        {
+            backPressedTime = tempTime;
+            Toast.makeText(getApplicationContext(), "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 }
