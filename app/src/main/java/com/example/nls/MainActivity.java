@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnStart, btnReset;
     Button btnGte100, btnLt100, btnLt60;
     TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
-    TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
+    TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtGigwan, txtHeart, txtEpinephrine;
 
     static Timer timer;
     static Chronometer chmTimer;
@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         txtChogi = findViewById(R.id.chogi);
         txtYangap = findViewById(R.id.yangap);
-        txtMrsopa = findViewById(R.id.mrsopa);
+        txtMrsopa1 = findViewById(R.id.mrsopa1);
+        txtMrsopa2 = findViewById(R.id.mrsopa2);
         txtGigwan = findViewById(R.id.gigwan);
         txtHeart = findViewById(R.id.heart);
         txtEpinephrine = findViewById(R.id.epinephrine);
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    txtStatus.setText("호흡음 청진");
+                                    txtStatus.setBackgroundResource(R.drawable.state_listen);
                                     txtYangap.setBackgroundResource(R.drawable.r_yangap);
                                     txtChogi.setBackgroundResource(R.drawable.b_chogi);
                                     alarm30S();
@@ -123,12 +124,12 @@ public class MainActivity extends AppCompatActivity {
                 TimerTask task1M30S = new TimerTask() {
                     @Override
                     public void run() {
-                        // 100 미만인 경우(flag = 1) 양압환기, MRSOPA
+                        // 100 미만인 경우(flag = 1) 양압환기, MRSOPA1
                         if(flag != 0) {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
+                                    txtMrsopa1.setBackgroundResource(R.drawable.r_mrsopa1);
                                     alarm30S();
                                 }
                             });
@@ -136,6 +137,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 // 2분 경과
+                TimerTask task2M = new TimerTask() {
+                    @Override
+                    public void run() {
+                        // 100 미만인 경우 (flag = 1) 양압환기, MRSOPA2
+                        if(flag != 0) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtMrsopa1.setBackgroundResource(R.drawable.b_mrsopa1);
+                                    txtMrsopa2.setBackgroundResource(R.drawable.r_mrsopa2);
+                                }
+                            });
+                        }
+                    }
+                };
+
                 TimerTask task2M30S = new TimerTask() {
                     @Override
                     public void run() {
@@ -153,13 +170,15 @@ public class MainActivity extends AppCompatActivity {
                             // 대화상자 띄우기
                             checkBreathAndBody();
                         }
+
                     }
                 };
 
                 timer.schedule(task30S, 30000 - 7);
                 timer.schedule(task1M, 60000 - 7);
                 timer.schedule(task1M30S, 90000 - 7);
-                timer.schedule(task2M30S, 120000 - 7);
+                timer.schedule(task2M, 120000 - 7);
+                timer.schedule(task2M30S, 150000 -7);
 
                 chmTimer.start();
             }
@@ -191,12 +210,12 @@ public class MainActivity extends AppCompatActivity {
                     if(60000 <= currentTime && currentTime < 61000) {
                         finishCpr(true);
                     }
-                    // 1분 1초 ~ 2분 1초 사이: 호흡 및 전신상태 확인
-                    else if(61000 <= currentTime && currentTime < 121000) {
+                    // 1분 1초 ~ 2분 31초 사이: 호흡 및 전신상태 확인
+                    else if(61000 <= currentTime && currentTime < 151000) {
                         checkBreathAndBody();
                     }
-                    // 2분 1초 이상: 종료 후 신생아 중환자실 이동
-                    else if(121000 <= currentTime) {
+                    // 2분 31초 이상: 종료 후 신생아 중환자실 이동
+                    else if(151000 <= currentTime) {
                         finishCpr(false);
                     }
                 }
@@ -306,7 +325,8 @@ public class MainActivity extends AppCompatActivity {
     private void turnOffAllAttributes() {
         txtChogi.setBackgroundResource(R.drawable.b_chogi);
         txtYangap.setBackgroundResource(R.drawable.b_yangap);
-        txtMrsopa.setBackgroundResource(R.drawable.b_mrsopa);
+        txtMrsopa1.setBackgroundResource(R.drawable.b_mrsopa1);
+        txtMrsopa2.setBackgroundResource(R.drawable.b_mrsopa2);
         txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
         txtHeart.setBackgroundResource(R.drawable.b_heart);
         txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
@@ -346,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                 btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
                 btnLt60.setBackgroundResource(R.drawable.btn_hr_lt60);
 
-                txtStatus.setText("초기처치");
+                txtStatus.setBackgroundResource(R.drawable.state_chogi);
 
                 turnOffAllAttributes();
             }
@@ -408,7 +428,8 @@ public class MainActivity extends AppCompatActivity {
         if(isGoToNewborn)
             dialog.setMessage("신생아실으로 이송합니다.");
         else
-            dialog.setMessage("중환자실로 이송합니다.");
+            dialog.setMessage("양압환기하며 신생아 중환자실로 이송합니다.");
+
 
         dialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override

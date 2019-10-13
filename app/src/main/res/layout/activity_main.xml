@@ -22,7 +22,6 @@
         android:layout_height="200dp"
         android:layout_weight="0.9"
         android:layout_marginTop="30dp"
-        android:background="@drawable/timer_edge"
         android:layout_gravity="center">
 
         <Chronometer
@@ -35,15 +34,20 @@
             android:textSize="40dp"
             android:textColor="#A6C6D3"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/timer_edge"/>
+
         <TextView
             android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="145dp"
+            android:layout_height="100dp"
             android:layout_weight="1"
             android:layout_gravity="center|top"
-            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="초기 처치"
+            android:background="@drawable/state_chogi"
             android:textSize="30dp"/>
 
         <Button
@@ -122,13 +126,26 @@
             android:background="@drawable/b_yangap"
             android:gravity="center" />
 
-        <TextView
-            android:id="@+id/mrsopa"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/b_mrsopa"
-            android:gravity="center" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mrsopa1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/b_mrsopa1" />
+
+            <TextView
+                android:id="@+id/mrsopa2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/b_mrsopa2"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
