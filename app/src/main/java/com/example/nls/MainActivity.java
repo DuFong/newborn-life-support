@@ -34,9 +34,12 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
 
     short flag = 1;
+    int count30S = 0;
     boolean isRestartGigwan = false;
     boolean isTimerStarted = false;
     boolean is2MStart = false;
+
+    String[] minutes = {"1분", "2분", "3분", "4분", "5분", "6분", "7분", "8분", "9분", "10분"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,18 @@ public class MainActivity extends AppCompatActivity {
                 timer = new Timer();
                 isTimerStarted = true;
 
+                // 30초 경과
+                TimerTask task30S = new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                alarm30S();
+                            }
+                        });
+                    }
+                };
                 // 1분 경과
                 TimerTask task1M = new TimerTask() {
                     @Override
@@ -90,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                     txtStatus.setText("호흡음 청진");
                                     txtYangap.setBackgroundResource(R.drawable.r_yangap);
                                     txtChogi.setBackgroundResource(R.drawable.b_chogi);
+                                    alarm30S();
                                 }
                             });
                         }
@@ -113,13 +129,14 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     txtMrsopa.setBackgroundResource(R.drawable.r_mrsopa);
+                                    alarm30S();
                                 }
                             });
                         }
                     }
                 };
                 // 2분 경과
-                TimerTask task2M = new TimerTask() {
+                TimerTask task2M30S = new TimerTask() {
                     @Override
                     public void run() {
                         // 100 미만인 경우 기관삽관
@@ -139,9 +156,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
+                timer.schedule(task30S, 30000 - 7);
                 timer.schedule(task1M, 60000 - 7);
                 timer.schedule(task1M30S, 90000 - 7);
-                timer.schedule(task2M, 120000 - 7);
+                timer.schedule(task2M30S, 120000 - 7);
 
                 chmTimer.start();
             }
@@ -221,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void afterGigwan() {
+        alarm30S();
+
         if(flag == 1){
             // 60이상 100 미만
             isRestartGigwan = false;
@@ -399,5 +419,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    // 30초마다 알람
+    private void alarm30S() {
+        /* 삐소리 재생
+        pisori.play(); */
+        Toast.makeText(MainActivity.this, "30초 경과", Toast.LENGTH_SHORT).show();
+        count30S++;
+        // 1분 단위 경과
+        if(count30S % 2 == 0) {
+            int minute = (count30S / 2) - 1;
+            /* "몇분" 음성 재생
+            sound[minute].play(); */
+            Toast.makeText(MainActivity.this, minutes[minute], Toast.LENGTH_LONG).show();
+        }
     }
 }
