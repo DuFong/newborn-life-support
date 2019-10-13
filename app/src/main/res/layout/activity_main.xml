@@ -52,6 +52,14 @@
             android:layout_height="50dp"
             android:background="@drawable/btn_start"
             android:layout_gravity="right|bottom" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn_reset"
+            android:visibility="gone"
+            android:layout_gravity="right|bottom"/>
     </FrameLayout>
 
 

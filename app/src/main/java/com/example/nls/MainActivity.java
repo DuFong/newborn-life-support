@@ -18,7 +18,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnStart;
+    Button btnStart, btnReset;
     Button btnGte100, btnLt100, btnLt60;
     TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
     TextView txtChogi, txtYangap, txtMrsopa, txtGigwan, txtHeart, txtEpinephrine;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnStart = findViewById(R.id.start);
+        btnReset = findViewById(R.id.reset);
         btnGte100 = findViewById(R.id.gte_100);
         btnLt100 = findViewById(R.id.lt_100);
         btnLt60 = findViewById(R.id.lt_60);
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // start 버튼 숨기기
                 btnStart.setVisibility(View.GONE);
+                // reset 버튼 활성화
+                btnReset.setVisibility(View.VISIBLE);
 
                 txtChogi.setBackgroundResource(R.drawable.r_chogi);
 
@@ -141,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
                 timer.schedule(task2M, 120000 - 7);
 
                 chmTimer.start();
+            }
+        });
+
+        // 타이머 리셋
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                setInitialActivity();
+
             }
         });
 
@@ -307,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 isTimerStarted = false;
 
                 btnStart.setVisibility(View.VISIBLE);
+                btnReset.setVisibility(View.GONE);
 
                 btnGte100.setBackgroundResource(R.drawable.btn_hr_gt100);
                 btnLt100.setBackgroundResource(R.drawable.btn_hr_lt100);
