@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 alarm30S();
+                                alarmMinute();
                             }
                         });
                     }
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                                     txtYangap.setBackgroundResource(R.drawable.r_yangap);
                                     txtChogi.setBackgroundResource(R.drawable.b_chogi);
                                     alarm30S();
+                                    alarmMinute();
                                 }
                             });
                         }
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     txtMrsopa1.setBackgroundResource(R.drawable.r_mrsopa1);
                                     alarm30S();
+                                    alarmMinute();
                                 }
                             });
                         }
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                                     txtMrsopa1.setBackgroundResource(R.drawable.b_mrsopa1);
                                     txtMrsopa2.setBackgroundResource(R.drawable.r_mrsopa2);
                                     alarm30S();
+                                    alarmMinute();
                                 }
                             });
                         }
@@ -170,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                                     txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
                                     txtGigwan.setEnabled(true);
                                     callEvery30S();
+                                    alarmMinute();
                                 }
                             });
                         }
