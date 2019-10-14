@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -504,8 +505,8 @@ public class MainActivity extends AppCompatActivity {
 
     // 30초마다 알람
     private void alarm30S() {
-        /* 삐소리 재생
-        pisori.play(); */
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.sec30);
+        mediaPlayer.start();
         Toast.makeText(MainActivity.this, "30초 경과", Toast.LENGTH_SHORT).show();
     }
 
