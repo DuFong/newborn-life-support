@@ -14,6 +14,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnStart, btnReset;
     Button btnGte100, btnLt100, btnLt60;
     TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
-    TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtGigwan, txtHeart, txtEpinephrine;
+    TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtHeart, txtEpinephrine;
+    Button txtGigwan;
 
     static Timer timer;
     static Chronometer chmTimer;
@@ -174,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
                                     txtMrsopa2.setBackgroundResource(R.drawable.b_mrsopa2);
                                     txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
                                     txtGigwan.setEnabled(true);
+                                    alarm30S();
                                     callEvery30S();
-                                    alarmMinute();
                                 }
                             });
                         }
@@ -270,8 +272,6 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(!isGigwanSuccess) {
                             isGigwanSuccess = true;
-                            txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
-                         /*   txtGigwan.setBackgroundResource(R.drawable.s_gigwan); */
                             afterSuccessGigwan();
                         }
                     }
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                alarm30S();
+                alarmMinute();
 
                 // 현재 지난 시간
                 long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
@@ -312,8 +312,63 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // 기관삽관이 파란색인 상태
     private void afterSuccessGigwan() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                // 기관삽관 파란색으로
+                turnOffAllAttributes();
+                txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
+                /*   txtGigwan.setBackgroundResource(R.drawable.s_gigwan); */
 
+                TimerTask test = new TimerTask() {
+                    @Override
+                    public void run() {
+                        callEvery30SAfterSuccessGigwan(true);
+                    }
+                };
+                timer.schedule(test, 30000 - 7);
+            }
+        });
+    }
+
+    private void callEvery30SAfterSuccessGigwan(final boolean isFromGigwan) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                alarm30S();
+
+                // 60이상 100미만
+                if(flag == 1) {
+                    afterSuccessGigwan();
+                    return;
+                }
+                // 60미만
+                else if(flag == 2) {
+                    turnOffAllAttributes();
+                    // 에피네프린 투여
+                    if(!isFromGigwan) {
+                        txtEpinephrine.setBackgroundResource(R.drawable.r_epineprine);
+                    }
+                    txtHeart.setBackgroundResource(R.drawable.r_heart);
+                }
+
+                // 현재 지난 시간
+                long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
+                // 10분 경과
+                if(currentTime > 599000) {
+                    return;
+                }
+                TimerTask test = new TimerTask() {
+                    @Override
+                    public void run() {
+                        callEvery30SAfterSuccessGigwan(false);
+                    }
+                };
+                timer.schedule(test, 30000 - 7);
+            }
+        });
     }
 
     private void afterGigwan() {
@@ -332,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(flag == 2) {
             // 60 미만
-            // 60 미만이지만 처음 2분에 실행 되는 경우 기관삽관부터 해야 함
+            // 60 미만이지만 처음 2분 30초에 실행 되는 경우 기관삽관부터 해야 함
             if(!is2MStart) {
                 isRestartGigwan = false;
                 handler.post(new Runnable() {
