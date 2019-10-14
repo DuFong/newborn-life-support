@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 // 현재 지난 시간
                 long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
                 // 10분 경과
-                if(currentTime > 570000) {
+                if(currentTime > 590000) {
                     finishCpr(false);
                     return;
                 }
@@ -318,8 +318,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 // 기관삽관 파란색으로
                 turnOffAllAttributes();
-                txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
-                /*   txtGigwan.setBackgroundResource(R.drawable.s_gigwan); */
+                txtGigwan.setBackgroundResource(R.drawable.s_gigwan);
 
                 TimerTask test = new TimerTask() {
                     @Override
