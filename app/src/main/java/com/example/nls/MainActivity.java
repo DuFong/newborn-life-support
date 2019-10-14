@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtHeart, txtEpinephrine;
     Button txtGigwan;
 
+    MediaPlayer mediaPlayerSec;
+    MediaPlayer mediaPlayerMin;
+
     static Timer timer;
     static Chronometer chmTimer;
 
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         txtGigwan.setEnabled(false);
 
         handler = new Handler();
+
+        mediaPlayerSec = MediaPlayer.create(this, R.raw.sec30);
 
         // 타이머 시작
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -283,6 +288,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         if(chmTimer != null) {
             chmTimer.stop();
+        }
+        if(mediaPlayerSec != null) {
+            mediaPlayerSec.release();
         }
         super.onDestroy();
     }
@@ -558,8 +566,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 30초마다 알람
     private void alarm30S() {
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.sec30);
-        mediaPlayer.start();
+        mediaPlayerSec.start();
         Toast.makeText(MainActivity.this, "30초 경과", Toast.LENGTH_SHORT).show();
     }
 
@@ -568,41 +575,47 @@ public class MainActivity extends AppCompatActivity {
         // 1분 단위 경과
         if(count30S % 2 == 0) {
             int minute = (count30S / 2);
-            MediaPlayer mediaPlayer = null;
             switch (minute) {
                 case 1:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute1);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute1);
                     break;
                 case 2:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute2);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute2);
                     break;
                 case 3:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute3);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute3);
                     break;
                 case 4:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute4);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute4);
                     break;
                 case 5:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute5);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute5);
                     break;
                 case 6:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute6);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute6);
                     break;
                 case 7:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute7);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute7);
                     break;
                 case 8:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute8);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute8);
                     break;
                 case 9:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute9);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute9);
                     break;
                 case 10:
-                    mediaPlayer = MediaPlayer.create(this, R.raw.minute10);
+                    mediaPlayerMin = MediaPlayer.create(this, R.raw.minute10);
                     break;
             }
-            if(mediaPlayer != null)
-                mediaPlayer.start();
+            if(mediaPlayerMin != null) {
+                mediaPlayerMin.start();
+                mediaPlayerMin.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mediaPlayerMin.release();
+                    }
+                });
+            }
         }
     }
 }
