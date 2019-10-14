@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnStart, btnReset;
     Button btnGte100, btnLt100, btnLt60;
     TextView txtTitle, txtStatus;                // txtTitle은 추후 실제 심박수를 측정하는 위젯으로 변경
-    TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtGigwan, txtHeart, txtEpinephrine;
+    TextView txtChogi, txtYangap, txtMrsopa1, txtMrsopa2, txtHeart, txtEpinephrine;
+    Button txtGigwan;
 
     static Timer timer;
     static Chronometer chmTimer;
