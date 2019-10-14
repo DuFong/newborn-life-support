@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     boolean isRestartGigwan = false;
     boolean isTimerStarted = false;
     boolean is2MStart = false;
+    boolean isGigwanSuccess = false;
 
     String[] minutes = {"1분", "2분", "3분", "4분", "5분", "6분", "7분", "8분", "9분", "10분"};
 
@@ -444,9 +446,12 @@ public class MainActivity extends AppCompatActivity {
 
     // 30초마다 알람
     private void alarm30S() {
-        /* 삐소리 재생
-        pisori.play(); */
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.sec30);
+        mediaPlayer.start();
         Toast.makeText(MainActivity.this, "30초 경과", Toast.LENGTH_SHORT).show();
+    }
+
+    private void alarmMinute() {
         count30S++;
         // 1분 단위 경과
         if(count30S % 2 == 0) {
