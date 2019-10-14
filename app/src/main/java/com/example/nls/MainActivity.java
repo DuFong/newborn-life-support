@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     boolean is2MStart = false;
     boolean isGigwanSuccess = false;
 
-    String[] minutes = {"1분", "2분", "3분", "4분", "5분", "6분", "7분", "8분", "9분", "10분"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -509,10 +508,42 @@ public class MainActivity extends AppCompatActivity {
         count30S++;
         // 1분 단위 경과
         if(count30S % 2 == 0) {
-            int minute = (count30S / 2) - 1;
-            /* "몇분" 음성 재생
-            sound[minute].play(); */
-            Toast.makeText(MainActivity.this, minutes[minute], Toast.LENGTH_LONG).show();
+            int minute = (count30S / 2);
+            MediaPlayer mediaPlayer = null;
+            switch (minute) {
+                case 1:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute1);
+                    break;
+                case 2:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute2);
+                    break;
+                case 3:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute3);
+                    break;
+                case 4:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute4);
+                    break;
+                case 5:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute5);
+                    break;
+                case 6:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute6);
+                    break;
+                case 7:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute7);
+                    break;
+                case 8:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute8);
+                    break;
+                case 9:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute9);
+                    break;
+                case 10:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.minute10);
+                    break;
+            }
+            if(mediaPlayer != null)
+                mediaPlayer.start();
         }
     }
 }
