@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     boolean isRestartGigwan = false;
     boolean isTimerStarted = false;
     boolean is2MStart = false;
+    boolean isGigwanSuccess = false;
 
     String[] minutes = {"1분", "2분", "3분", "4분", "5분", "6분", "7분", "8분", "9분", "10분"};
 
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         txtGigwan = findViewById(R.id.gigwan);
         txtHeart = findViewById(R.id.heart);
         txtEpinephrine = findViewById(R.id.epinephrine);
+
+        txtGigwan.setEnabled(false);
 
         handler = new Handler();
 
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     txtMrsopa1.setBackgroundResource(R.drawable.b_mrsopa1);
                                     txtMrsopa2.setBackgroundResource(R.drawable.r_mrsopa2);
+                                    alarm30S();
                                 }
                             });
                         }
@@ -161,7 +165,11 @@ public class MainActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    afterGigwan();
+                                    // 기관삽관 성공 시 선택할 수 있도록 버튼 활성화
+                                    txtMrsopa2.setBackgroundResource(R.drawable.b_mrsopa2);
+                                    txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
+                                    txtGigwan.setEnabled(true);
+                                    callEvery30S();
                                 }
                             });
                         }
@@ -247,6 +255,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        txtGigwan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!isGigwanSuccess) {
+                            isGigwanSuccess = true;
+                            txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
+                         /*   txtGigwan.setBackgroundResource(R.drawable.s_gigwan); */
+                            afterSuccessGigwan();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -255,6 +280,34 @@ public class MainActivity extends AppCompatActivity {
             chmTimer.stop();
         }
         super.onDestroy();
+    }
+
+    private void callEvery30S() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                alarm30S();
+
+                // 현재 지난 시간
+                long currentTime = SystemClock.elapsedRealtime() - chmTimer.getBase();
+                // 10분 경과
+                if(currentTime > 570000) {
+                    finishCpr(false);
+                    return;
+                }
+                TimerTask test = new TimerTask() {
+                    @Override
+                    public void run() {
+                        callEvery30S();
+                    }
+                };
+                timer.schedule(test, 30000 - 7);
+            }
+        });
+    }
+
+    private void afterSuccessGigwan() {
+
     }
 
     private void afterGigwan() {
@@ -330,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
         txtGigwan.setBackgroundResource(R.drawable.b_gigwan);
         txtHeart.setBackgroundResource(R.drawable.b_heart);
         txtEpinephrine.setBackgroundResource(R.drawable.b_epineprine);
+        txtGigwan.setEnabled(false);
     }
 
     // 초기 시작 화면 복구
@@ -343,6 +397,7 @@ public class MainActivity extends AppCompatActivity {
         flag = 1;
         isRestartGigwan = false;
         isTimerStarted = false;
+        isGigwanSuccess = false;
 
         handler.post(new Runnable() {
             @Override
@@ -447,6 +502,9 @@ public class MainActivity extends AppCompatActivity {
         /* 삐소리 재생
         pisori.play(); */
         Toast.makeText(MainActivity.this, "30초 경과", Toast.LENGTH_SHORT).show();
+    }
+
+    private void alarmMinute() {
         count30S++;
         // 1분 단위 경과
         if(count30S % 2 == 0) {
