@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     // 기관삽관 성공 시 선택할 수 있도록 버튼 활성화
                                     txtMrsopa2.setBackgroundResource(R.drawable.b_mrsopa2);
+                                    txtYangap.setBackgroundResource(R.drawable.b_yangap);
                                     txtGigwan.setBackgroundResource(R.drawable.r_gigwan);
                                     txtGigwan.setEnabled(true);
                                     alarm30S();
